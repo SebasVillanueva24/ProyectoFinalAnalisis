@@ -16,5 +16,22 @@ namespace Proyecto3Analisis
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Individuo prueba = new Individuo();
+
+            prueba.setValores();
+            prueba.mostrar();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Tablero tablero = new Tablero();
+
+            tablero.leerDatos();
+
+            tablero.mostrar();
+        }
     }
 }
