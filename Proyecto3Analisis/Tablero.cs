@@ -16,14 +16,28 @@ namespace Proyecto3Analisis
 
         List<Individuo> Poblacion = new List<Individuo>();
 
-        int cantIndividuos = 100;
+        int cantIndividuos = 2;
 
         Hashtable Baterias = new Hashtable();
 
-  
+        private static readonly Random random = new Random();
+        private static readonly object syncLock = new object();
 
+        //Probabilidades de la cadena de Markov
+        //Motor 1
 
+        int[] normal1 = { 80, 10, 5, 5 };
 
+        //Motor 2
+
+        int[] normal2 = { 50, 40, 5, 5 };
+        int[] moderado = { 50, 40, 5, 5 };
+
+        //Motor 3
+
+        int[] normal3 = { 45, 30, 20, 5 };
+        int[] moderado2 = { 45, 30, 20, 5 };
+        int[] dificil = { 45, 30, 20, 5 };
 
         public Tablero()
         {
@@ -34,11 +48,8 @@ namespace Proyecto3Analisis
             generarPoblacionInicial();
 
             fitnessPoblacion();
-
-
-            
-
         }
+        public static int RandomNumber(int min, int max) { lock (syncLock) { return random.Next(min, max); } }
 
         public void generarPoblacionInicial()
         {
@@ -58,9 +69,6 @@ namespace Proyecto3Analisis
         {
             Hashtable costoRutas = new Hashtable();
 
-            //costoRutas.Add("arriba", costo);
-
-            //costoRutas["arriba"];
             int costoArriba = 0;
             int costoDerecha = 0;
             int costoIzquierda = 0;
@@ -115,10 +123,10 @@ namespace Proyecto3Analisis
                             }
                         }
 
-                        costoRutas.Add("costoArriba", costoArriba);
-                        costoRutas.Add("costoAbajo", costoAbajo);
-                        costoRutas.Add("costoDerecha", costoDerecha);
-                        costoRutas.Add("costoIzquierda", costoIzquierda);
+                        costoRutas.Add(1, costoArriba);
+                        costoRutas.Add(2, costoAbajo);
+                        costoRutas.Add(3, costoDerecha);
+                        costoRutas.Add(4, costoIzquierda);
 
 
                     }
@@ -137,6 +145,7 @@ namespace Proyecto3Analisis
 
             Casilla casillaActual;
 
+            int costoMinimo = 10000;
             if (rutaInv.Count == 0)
             {
                 casillaActual = filas.ElementAt(0).ElementAt(0);
@@ -148,14 +157,23 @@ namespace Proyecto3Analisis
 
             Hashtable costos = costoRutas(casillaActual.getID(),indv);
 
-            
-            
+            for (int i = 1; i <= 4; i++) 
+            {
+                Console.WriteLine(i + " " + costos[i].ToString());
+
+                if (Int16.Parse(costos[i].ToString()) < costoMinimo)
+                {
+                    costoMinimo = Int16.Parse(costos[i].ToString());
+                }
+            }
+
+            Console.WriteLine(costoMinimo);
         }
         public int fitnessPoblacion()
         {
             int costo = 0;
 
-            Console.WriteLine(Baterias[1]);
+            //Console.WriteLine(Baterias[1]);
             
             for (int i = 1; i < Poblacion.Count; i++)
             {
@@ -164,7 +182,7 @@ namespace Proyecto3Analisis
 
                 int bateriaTotal = Int16.Parse(Baterias[indv.getTipoBateria()].ToString());
 
-                int vision = indv.getTipoCamara();
+                sacarRutas(indv);
                 
                 
 
