@@ -9,6 +9,8 @@ namespace Proyecto3Analisis
 {
     class Individuo
     {
+        int ID = 0;
+
         int tipoCamara;
         int tipoMotor;
         int tipoBateria;
@@ -17,16 +19,23 @@ namespace Proyecto3Analisis
 
         int calificacion;
 
+        bool objetivo;
+
         Individuo padre = null;
         Individuo madre = null;
 
-        Stack ruta = new Stack();
-        Random rnd = new Random();
+        Stack<Casilla> ruta = new Stack<Casilla>();
 
-        bool objetivo;
+        private static readonly Random random = new Random();
+        private static readonly object syncLock = new object();
 
-        public Individuo()
+
+
+
+        public Individuo(int pID)
         {
+            ID = pID;
+
             tipoCamara = 0;
             tipoMotor = 0;
             tipoBateria = 0;
@@ -36,45 +45,82 @@ namespace Proyecto3Analisis
             objetivo = false;
         }
 
+        public void sacarRandom(int min, int max)
+        {
+
+        }
+
+        //Function to get a random number 
+
+        public static int RandomNumber(int min, int max) { lock (syncLock) { return random.Next(min, max); } }
+
+
+
+        public void setCalificacion(int resultado)
+        {
+            calificacion = resultado;
+        }
+
+        public Stack<Casilla> getRuta()
+        {
+            return ruta;
+        }
+
+
         public void setValores()
         {
-            int num = rnd.Next(1, 4);
+            
+            int num = RandomNumber(1, 4);
 
             tipoCamara = num;
 
-            num = rnd.Next(1, 4);
+            int num2 = RandomNumber(1, 4);
 
-            tipoMotor = num;
+            tipoMotor = num2;
 
-            num = rnd.Next(1, 4);
+            int num3 = RandomNumber(1, 4);
 
-            tipoBateria = num;
+            tipoBateria = num3;
+        }
+
+        public int getTipoCamara()
+        {
+            return tipoCamara;
+        }
+        public int getTipoMotor()
+        {
+            return tipoMotor;
+        }
+        public int getTipoBateria()
+        {
+            return tipoBateria;
         }
 
         public void mostrar()
         {
-            Console.WriteLine("[" + tipoCamara + " , " + tipoMotor + " , " + tipoBateria + "]");
+            Console.WriteLine("ID: "+ID+" [" + tipoCamara + " , " + tipoMotor + " , " + tipoBateria + "]");
         }
 
         public void mutar()
         {
-            int genPorMutar = rnd.Next(1, 4);
+
+            int genPorMutar = RandomNumber(1, 4);
 
             if(genPorMutar == 1)
             {
-                int nuevaCamara = rnd.Next(1, 4);
+                int nuevaCamara = RandomNumber(1, 4);
 
                 tipoBateria = nuevaCamara;
             }
             else if (genPorMutar == 2)
             {
-                int nuevoMotor = rnd.Next(1, 4);
+                int nuevoMotor = RandomNumber(1, 4);
 
                 tipoMotor = nuevoMotor;
             }
             else if (genPorMutar == 3)
             {
-                int nuevaBateria = rnd.Next(1, 4);
+                int nuevaBateria = RandomNumber(1, 4);
 
                 tipoBateria = nuevaBateria;
             }

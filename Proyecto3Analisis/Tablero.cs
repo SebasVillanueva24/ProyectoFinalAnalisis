@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,11 +14,138 @@ namespace Proyecto3Analisis
 
         Random rnd = new Random();
 
+        List<Individuo> Poblacion = new List<Individuo>();
 
-        
+        int cantIndividuos = 100;
+
+        Hashtable Baterias = new Hashtable();
+
+  
+
+
+
+
         public Tablero()
         {
+            Baterias.Add(1, 100);
+            Baterias.Add(2, 200);
+            Baterias.Add(3, 300);
+
+            generarPoblacionInicial();
+
+            fitnessPoblacion();
+
+
             
+
+        }
+
+        public void generarPoblacionInicial()
+        {
+         
+            for (int i = 1; i<=cantIndividuos;i++)
+            {
+                Individuo nuevo = new Individuo(i);
+                nuevo.setValores();
+                Poblacion.Add(nuevo);
+            }
+
+            
+
+        }
+
+        public Hashtable costoRutas(int idCasilla,Individuo indv)
+        {
+            Hashtable costoRutas = new Hashtable();
+
+            //costoRutas.Add("arriba", costo);
+
+            //costoRutas["arriba"];
+            int costo = 0;
+
+            for (int i = 0; i < filas.Count; i++)
+            {
+                
+                for (int j = 0; j < filas.ElementAt(i).Count; j++)
+                {
+                    if(filas.ElementAt(i).ElementAt(j).getID() == idCasilla)
+                    {
+                        for(int v = 1;v<=indv.getTipoCamara();v++)
+                        {
+                            // validacion del motor 
+
+                            costo += filas.ElementAt(i).ElementAt(j).getTipo() * indv.getTipoMotor();
+
+                            costo += indv.getTipoCamara() * indv.getTipoCamara();
+
+                        }
+
+                    }
+                    
+
+                }
+                
+            }
+
+
+            return costoRutas;
+        }
+        public void sacarRutas(Individuo indv)
+        {
+            Stack<Casilla> rutaInv = indv.getRuta();
+
+            Casilla casillaActual;
+
+            if (rutaInv.Count == 0)
+            {
+                casillaActual = filas.ElementAt(0).ElementAt(0);
+            }
+            else
+            {
+                casillaActual = rutaInv.Peek();
+            }
+
+            costoRutas(casillaActual.getID(),indv);
+
+            
+            
+        }
+        public int fitnessPoblacion()
+        {
+            int costo = 0;
+
+            Console.WriteLine(Baterias[1]);
+            
+            for (int i = 1; i < Poblacion.Count; i++)
+            {
+
+                Individuo indv = Poblacion.ElementAt(i);
+
+                int bateriaTotal = Int16.Parse(Baterias[indv.getTipoBateria()].ToString());
+
+                int vision = indv.getTipoCamara();
+                
+                
+
+            }
+
+
+
+            return 0;
+        }
+
+        public int fitness(Individuo indv)
+        {
+
+            return 0;
+        }
+
+        public void mostrarPoblacion()
+        {
+            for (int i = 0; i < cantIndividuos; i++)
+            {
+                Poblacion.ElementAt(i).mostrar();
+            }
         }
 
         public void leerDatos()
@@ -43,7 +171,7 @@ namespace Proyecto3Analisis
                     //write the lie to console window
                     tipo = Int16.Parse(line);
 
-                    Console.WriteLine(tipo);
+                   
                     if (cont2 < 21)
                     {
 
@@ -177,7 +305,7 @@ namespace Proyecto3Analisis
             }
 
             Console.WriteLine(filas.Count);
-            Console.WriteLine(filas.ElementAt(0));
+            Console.WriteLine(filas.ElementAt(0).Count);
 
 
         }

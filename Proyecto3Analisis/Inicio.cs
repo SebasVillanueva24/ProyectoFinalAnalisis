@@ -28,29 +28,29 @@ namespace Proyecto3Analisis
         int[] moderado2 = { 45, 30, 20, 5 };
         int[] dificil = { 45, 30, 20, 5 };
 
+        Tablero tablero = new Tablero();
+
 
         public Inicio()
         {
             InitializeComponent();
+
+            tablero.leerDatos();
         }
+
+        
         
        
         private void button1_Click(object sender, EventArgs e)
         {
-
-            Individuo prueba = new Individuo();
-
-
-            prueba.setValores();
-            prueba.mostrar();
+            tablero.mostrarPoblacion();
+            
+         
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Tablero tablero = new Tablero();
-
-            tablero.leerDatos();
-
+           
             tablero.mostrar();
         }
     }
