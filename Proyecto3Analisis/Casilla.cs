@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto3Analisis
 {
-    class Casilla
+    public class Casilla
     {
         int numCasilla;
         int tipoCasilla;

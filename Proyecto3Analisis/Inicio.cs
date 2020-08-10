@@ -35,5 +35,40 @@ namespace Proyecto3Analisis
            
             tablero.mostrar();
         }
+
+        private void arbol_Click(object sender, EventArgs e)
+        {
+            List<Individuo> pruebas = new List<Individuo>();
+
+            for (int i = 1; i <= 3; i++)
+            {
+                Individuo nuevo = new Individuo(i);
+                nuevo.setValores();
+                pruebas.Add(nuevo);
+            }
+
+            pruebas.ElementAt(2).setPadre(pruebas.ElementAt(0));
+            pruebas.ElementAt(2).setMadre(pruebas.ElementAt(1));
+
+            new ArbolGen(pruebas.ElementAt(2)).Show();
+
+
+        }
+
+        private void bRuta_Click(object sender, EventArgs e)
+        {
+           
+            Individuo nuevo = new Individuo(0);
+
+
+            for (int i = 1; i < 6; i++)
+            {
+                Casilla nueva = new Casilla(1, i);
+                nuevo.añadirCasilla(nueva);
+            }
+
+            
+            new Ruta(nuevo).Show();
+        }
     }
 }

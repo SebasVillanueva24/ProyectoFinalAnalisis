@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArbolGen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArbolGen.Designer.cs">
+      <DependentUpon>ArbolGen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Casilla.cs" />
     <Compile Include="Inicio.cs">
       <SubType>Form</SubType>
@@ -56,7 +62,16 @@
     <Compile Include="Individuo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ruta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ruta.Designer.cs">
+      <DependentUpon>Ruta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tablero.cs" />
+    <EmbeddedResource Include="ArbolGen.resx">
+      <DependentUpon>ArbolGen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
     </EmbeddedResource>
@@ -69,6 +84,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Ruta.resx">
+      <DependentUpon>Ruta.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -41,9 +41,9 @@ namespace Proyecto3Analisis
 
         public Tablero()
         {
-            Baterias.Add(1, 100);
-            Baterias.Add(2, 200);
-            Baterias.Add(3, 300);
+            Baterias.Add(1, 180);
+            Baterias.Add(2, 260);
+            Baterias.Add(3, 380);
 
             generarPoblacionInicial();
 

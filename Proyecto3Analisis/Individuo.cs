@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto3Analisis
 {
-    class Individuo
+    public class Individuo
     {
         int ID = 0;
 
@@ -45,10 +45,35 @@ namespace Proyecto3Analisis
             objetivo = false;
         }
 
-        public void sacarRandom(int min, int max)
+        public int getID()
         {
-
+            return ID;
         }
+
+        public void añadirCasilla(Casilla nueva)
+        {
+            ruta.Push(nueva);
+        }
+
+        public void setPadre(Individuo pPadre)
+        {
+            padre = pPadre;
+        }
+        public void setMadre(Individuo pMadre)
+        {
+            madre = pMadre;
+        }
+
+        public Individuo getPadre()
+        {
+            return padre;
+        }
+        public Individuo getMadre()
+        {
+            return madre;
+        }
+
+
 
         //Function to get a random number 
 
