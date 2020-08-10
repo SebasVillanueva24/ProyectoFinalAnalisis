@@ -12,6 +12,22 @@ namespace Proyecto3Analisis
 {
     public partial class Form1 : Form
     {
+        //Probabilidades de la cadena de Markov
+        //Motor 1
+
+        int[] normal1 = { 80, 10, 5, 5 };
+
+        //Motor 2
+
+        int[] normal2 = { 50, 40, 5, 5 };
+        int[] moderado = { 50, 40, 5, 5 };
+
+        //Motor 3
+
+        int[] normal3 = {45, 30, 20, 5};
+        int[] moderado2 = {45, 30, 20, 5};
+        int[] dificil = { 45, 30, 20, 5 };
+
         public Form1()
         {
             InitializeComponent();
@@ -19,6 +35,7 @@ namespace Proyecto3Analisis
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             Individuo prueba = new Individuo();
 
 
