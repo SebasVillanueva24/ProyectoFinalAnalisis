@@ -12,13 +12,6 @@ namespace Proyecto3Analisis
 {
     public partial class Inicio : Form
     {
-<<<<<<< HEAD:Proyecto3Analisis/Inicio.cs
-        // aca 
-        string a;
-
-
-        public Inicio()
-=======
         //Probabilidades de la cadena de Markov
         //Motor 1
 
@@ -31,19 +24,17 @@ namespace Proyecto3Analisis
 
         //Motor 3
 
-        int[] normal3 = {45, 30, 20, 5};
-        int[] moderado2 = {45, 30, 20, 5};
+        int[] normal3 = { 45, 30, 20, 5 };
+        int[] moderado2 = { 45, 30, 20, 5 };
         int[] dificil = { 45, 30, 20, 5 };
 
-        public Form1()
->>>>>>> 61c2a52117648a702ffbae5797d59f698a7c1aa2:Proyecto3Analisis/Form1.cs
+
+        public Inicio()
         {
             InitializeComponent();
-
-
-
         }
-
+        
+       
         private void button1_Click(object sender, EventArgs e)
         {
 
