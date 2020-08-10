@@ -61,7 +61,10 @@ namespace Proyecto3Analisis
             //costoRutas.Add("arriba", costo);
 
             //costoRutas["arriba"];
-            int costo = 0;
+            int costoArriba = 0;
+            int costoDerecha = 0;
+            int costoIzquierda = 0;
+            int costoAbajo = 0;
 
             for (int i = 0; i < filas.Count; i++)
             {
@@ -70,20 +73,58 @@ namespace Proyecto3Analisis
                 {
                     if(filas.ElementAt(i).ElementAt(j).getID() == idCasilla)
                     {
-                        for(int v = 1;v<=indv.getTipoCamara();v++)
+         
+                        // Ruta de la derecha
+                        for(int c = 1; c <= indv.getTipoCamara();c++)
                         {
-                            // validacion del motor 
+                            //Pregunta si la casilla de la ruta esta dentro de la matriz
+                            if(i+c < 20)
+                            {
+                                costoDerecha += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoDerecha += indv.getTipoCamara();
 
-                            costo += filas.ElementAt(i).ElementAt(j).getTipo() * indv.getTipoMotor();
 
-                            costo += indv.getTipoCamara() * indv.getTipoCamara();
-
+                            }
+                        }
+                            
+                        //Ruta de la izquierda
+                        for (int c = 1; c <= indv.getTipoCamara(); c++)
+                        {
+                            if (i - c > 0)
+                            {
+                                costoIzquierda += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoIzquierda += indv.getTipoCamara();
+                            }
+                        }
+                        //Ruta de arriba
+                        for (int c = 1; c <= indv.getTipoCamara(); c++)
+                        {
+                            if (j - c > 0)
+                            {
+                                costoArriba += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoArriba += indv.getTipoCamara();
+                            }
+                        }
+                        //Ruta de abajo
+                        for (int c = 1; c <= indv.getTipoCamara(); c++)
+                        {
+                            if (j + c < 20)
+                            {
+                                costoAbajo += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoAbajo += indv.getTipoCamara();
+                            }
                         }
 
-                    }
-                    
+                        costoRutas.Add("costoArriba", costoArriba);
+                        costoRutas.Add("costoAbajo", costoAbajo);
+                        costoRutas.Add("costoDerecha", costoDerecha);
+                        costoRutas.Add("costoIzquierda", costoIzquierda);
 
+
+                    }
+                    break;
                 }
+                break;
                 
             }
 
@@ -105,7 +146,7 @@ namespace Proyecto3Analisis
                 casillaActual = rutaInv.Peek();
             }
 
-            costoRutas(casillaActual.getID(),indv);
+            Hashtable costos = costoRutas(casillaActual.getID(),indv);
 
             
             
