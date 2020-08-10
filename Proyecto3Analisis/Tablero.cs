@@ -16,7 +16,7 @@ namespace Proyecto3Analisis
 
         List<Individuo> Poblacion = new List<Individuo>();
 
-        int cantIndividuos = 2;
+        int cantIndividuos = 1;
 
         Hashtable Baterias = new Hashtable();
 
@@ -47,7 +47,7 @@ namespace Proyecto3Analisis
 
             generarPoblacionInicial();
 
-            fitnessPoblacion();
+            //fitnessPoblacion();
         }
         public static int RandomNumber(int min, int max) { lock (syncLock) { return random.Next(min, max); } }
 
@@ -86,9 +86,9 @@ namespace Proyecto3Analisis
                         for(int c = 1; c <= indv.getTipoCamara();c++)
                         {
                             //Pregunta si la casilla de la ruta esta dentro de la matriz
-                            if(i+c < 20)
+                            if(j+c < 20)
                             {
-                                costoDerecha += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoDerecha += filas.ElementAt(i).ElementAt(j+c).getTipo();
                                 costoDerecha += indv.getTipoCamara();
 
 
@@ -98,33 +98,33 @@ namespace Proyecto3Analisis
                         //Ruta de la izquierda
                         for (int c = 1; c <= indv.getTipoCamara(); c++)
                         {
-                            if (i - c > 0)
+                            if (j - c > 0)
                             {
-                                costoIzquierda += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoIzquierda += filas.ElementAt(i).ElementAt(j-c).getTipo();
                                 costoIzquierda += indv.getTipoCamara();
                             }
                         }
                         //Ruta de arriba
                         for (int c = 1; c <= indv.getTipoCamara(); c++)
                         {
-                            if (j - c > 0)
+                            if (i + c < 20)
                             {
-                                costoArriba += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoArriba += filas.ElementAt(i+c).ElementAt(j).getTipo();
                                 costoArriba += indv.getTipoCamara();
                             }
                         }
                         //Ruta de abajo
                         for (int c = 1; c <= indv.getTipoCamara(); c++)
                         {
-                            if (j + c < 20)
+                            if (i - c > 0)
                             {
-                                costoAbajo += filas.ElementAt(i).ElementAt(j).getTipo();
+                                costoAbajo += filas.ElementAt(i-c).ElementAt(j).getTipo();
                                 costoAbajo += indv.getTipoCamara();
                             }
                         }
 
-                        costoRutas.Add(1, costoArriba);
-                        costoRutas.Add(2, costoAbajo);
+                        costoRutas.Add(1, costoAbajo);
+                        costoRutas.Add(2, costoArriba);
                         costoRutas.Add(3, costoDerecha);
                         costoRutas.Add(4, costoIzquierda);
 
@@ -145,10 +145,13 @@ namespace Proyecto3Analisis
 
             Casilla casillaActual;
 
+            Console.WriteLine(filas.Count);
+            
             int costoMinimo = 10000;
             if (rutaInv.Count == 0)
             {
                 casillaActual = filas.ElementAt(0).ElementAt(0);
+                
             }
             else
             {
@@ -161,29 +164,30 @@ namespace Proyecto3Analisis
             {
                 Console.WriteLine(i + " " + costos[i].ToString());
 
-                if (Int16.Parse(costos[i].ToString()) < costoMinimo)
+                if (Int16.Parse(costos[i].ToString()) < costoMinimo && Int16.Parse(costos[i].ToString()) != 0)
                 {
                     costoMinimo = Int16.Parse(costos[i].ToString());
                 }
             }
-
-            Console.WriteLine(costoMinimo);
+            
+            Console.WriteLine("Costo minimo: "+costoMinimo);
         }
         public int fitnessPoblacion()
         {
             int costo = 0;
 
-            //Console.WriteLine(Baterias[1]);
             
-            for (int i = 1; i < Poblacion.Count; i++)
-            {
+            
 
+            for (int i = 0; i < Poblacion.Count; i++)
+            {
+                Console.WriteLine("voy a comenzar");
                 Individuo indv = Poblacion.ElementAt(i);
 
                 int bateriaTotal = Int16.Parse(Baterias[indv.getTipoBateria()].ToString());
 
-                sacarRutas(indv);
                 
+                sacarRutas(indv);
                 
 
             }
