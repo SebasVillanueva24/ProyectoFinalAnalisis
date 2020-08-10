@@ -59,9 +59,7 @@ namespace Proyecto3Analisis
                 Individuo nuevo = new Individuo(i);
                 nuevo.setValores();
                 Poblacion.Add(nuevo);
-            }
-
-            
+            }  
 
         }
 
@@ -81,77 +79,66 @@ namespace Proyecto3Analisis
                 {
                     if(filas.ElementAt(i).ElementAt(j).getID() == idCasilla)
                     {
-         
+                        int c = 1;
                         // Ruta de la derecha
-                        for(int c = 1; c <= indv.getTipoCamara();c++)
+                        
+                        //Pregunta si la casilla de la ruta esta dentro de la matriz
+                        if(j+c < 20)
                         {
-                            //Pregunta si la casilla de la ruta esta dentro de la matriz
-                            if(j+c < 20)
-                            {
-                                costoDerecha += filas.ElementAt(i).ElementAt(j+c).getTipo();
-                                costoDerecha += indv.getTipoCamara();
-
-
-                            }
+                            costoDerecha += filas.ElementAt(i).ElementAt(j+c).getTipo();
+                            costoDerecha += indv.getTipoCamara();
                         }
-                            
+                          
                         //Ruta de la izquierda
-                        for (int c = 1; c <= indv.getTipoCamara(); c++)
+                        
+                        if (j - c > 0)
                         {
-                            if (j - c > 0)
-                            {
-                                costoIzquierda += filas.ElementAt(i).ElementAt(j-c).getTipo();
-                                costoIzquierda += indv.getTipoCamara();
-                            }
+                            costoIzquierda += filas.ElementAt(i).ElementAt(j-c).getTipo();
+                            costoIzquierda += indv.getTipoCamara();
                         }
+                        
                         //Ruta de arriba
-                        for (int c = 1; c <= indv.getTipoCamara(); c++)
+                        
+                        if (i + c < 20)
                         {
-                            if (i + c < 20)
-                            {
-                                costoArriba += filas.ElementAt(i+c).ElementAt(j).getTipo();
-                                costoArriba += indv.getTipoCamara();
-                            }
+                            costoArriba += filas.ElementAt(i+c).ElementAt(j).getTipo();
+                            costoArriba += indv.getTipoCamara();
                         }
+                        
                         //Ruta de abajo
-                        for (int c = 1; c <= indv.getTipoCamara(); c++)
+                        
+                        if (i - c > 0)
                         {
-                            if (i - c > 0)
-                            {
-                                costoAbajo += filas.ElementAt(i-c).ElementAt(j).getTipo();
-                                costoAbajo += indv.getTipoCamara();
-                            }
+                            costoAbajo += filas.ElementAt(i-c).ElementAt(j).getTipo();
+                            costoAbajo += indv.getTipoCamara();
                         }
-
+                        
                         costoRutas.Add(1, costoAbajo);
                         costoRutas.Add(2, costoArriba);
                         costoRutas.Add(3, costoDerecha);
                         costoRutas.Add(4, costoIzquierda);
-
-
                     }
                     break;
                 }
-                break;
-                
+                break;   
             }
-
-
             return costoRutas;
         }
-        public void sacarRutas(Individuo indv)
+        public int sacarRutas(Individuo indv)
         {
             Stack<Casilla> rutaInv = indv.getRuta();
 
             Casilla casillaActual;
 
-            Console.WriteLine(filas.Count);
-            
             int costoMinimo = 10000;
+
+            //List<Casilla> casillasProximas = new List<Casilla>();
+
+            Casilla[] casillasProximas = { null, null, null, null };
+
             if (rutaInv.Count == 0)
             {
-                casillaActual = filas.ElementAt(0).ElementAt(0);
-                
+                casillaActual = filas.ElementAt(0).ElementAt(0);  
             }
             else
             {
@@ -171,13 +158,193 @@ namespace Proyecto3Analisis
             }
             
             Console.WriteLine("Costo minimo: "+costoMinimo);
+
+            if (casillaActual.x - 1 > 0)
+            {
+                //Abajo
+                casillasProximas[0] = filas.ElementAt(casillaActual.x - 1).ElementAt(casillaActual.y);
+            }
+            if (casillaActual.x + 1 < 20)
+            {
+                //Arriba
+                casillasProximas[1] = (filas.ElementAt(casillaActual.x + 1).ElementAt(casillaActual.y));
+            }
+            
+            if (casillaActual.y + 1 < 20)
+            {
+                //Derecha
+                casillasProximas[2] = (filas.ElementAt(casillaActual.x).ElementAt(casillaActual.y + 1));
+            }
+            if (casillaActual.y - 1 < 20)
+            {
+                //Izquierda
+                casillasProximas[3] = (filas.ElementAt(casillaActual.x).ElementAt(casillaActual.y - 1));
+            }
+
+           
+
+            if(indv.getTipoMotor() == 1)
+            {
+                while(true)
+                {
+                    int num = RandomNumber(1, 101);
+
+                    if(num <= normal1[0])
+                    {
+                        for(int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 1)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i+1].ToString());
+                            }
+                        }
+                    }
+                    else if(num > normal1[0] && num <= normal1[0]+normal1[1])
+                    {
+                        for (int i = 0; i < casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 2)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                    else if (num > normal1[0]+normal1[1] && num <= normal1[0] + normal1[1] + normal1[2])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 3)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                    else if (num > normal1[0] + normal1[1] + normal1[2] && num <= normal1[0] + normal1[1] + normal1[2] + normal1[3])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 4)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                }
+                
+            }
+                
+            else if (indv.getTipoMotor() == 2)
+            {
+                while (true)
+                {
+                    int num = RandomNumber(1, 101);
+
+                    if (num <= normal2[0])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 1)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString());
+                            }
+                        }
+                    }
+                    else if (num > normal2[0] && num <= normal2[0] + normal2[1])
+                    {
+                        for (int i = 0; i < casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 2)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                    else if (num > normal2[0] + normal2[1] && num <= normal2[0] + normal2[1] + normal2[2])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 3)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                    else if (num > normal2[0] + normal2[1] + normal2[2] && num <= normal2[0] + normal2[1] + normal2[2] + normal2[3])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 4)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (indv.getTipoMotor() == 3)
+            {
+                while (true)
+                {
+                    int num = RandomNumber(1, 101);
+
+                    if (num <= normal3[0])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 1)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString());
+                            }
+                        }
+                    }
+                    else if (num > normal3[0] && num <= normal3[0] + normal3[1])
+                    {
+                        for (int i = 0; i < casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 2)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                    else if (num > normal3[0] + normal3[1] && num <= normal3[0] + normal3[1] + normal3[2])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 3)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                    else if (num > normal3[0] + normal3[1] + normal3[2] && num <= normal3[0] + normal3[1] + normal3[2] + normal3[3])
+                    {
+                        for (int i = 0; i <= casillasProximas.Length; i++)
+                        {
+                            if (casillasProximas.ElementAt(i) != null && casillasProximas.ElementAt(i).getTipo() == 4)
+                            {
+                                rutaInv.Push(casillasProximas.ElementAt(i));
+                                return Int16.Parse(costos[i + 1].ToString()); ;
+                            }
+                        }
+                    }
+                }
+            }
         }
         public int fitnessPoblacion()
         {
             int costo = 0;
-
-            
-            
 
             for (int i = 0; i < Poblacion.Count; i++)
             {
@@ -185,14 +352,10 @@ namespace Proyecto3Analisis
                 Individuo indv = Poblacion.ElementAt(i);
 
                 int bateriaTotal = Int16.Parse(Baterias[indv.getTipoBateria()].ToString());
-
-                
-                sacarRutas(indv);
-                
+                    
+                int costoCasilla = sacarRutas(indv); //Debe retornar el costo para restarlo
 
             }
-
-
 
             return 0;
         }
@@ -210,7 +373,6 @@ namespace Proyecto3Analisis
                 Poblacion.ElementAt(i).mostrar();
             }
         }
-
         public void leerDatos()
         {
             int cont = 1;
@@ -220,13 +382,13 @@ namespace Proyecto3Analisis
 
             List<Casilla> fila = new List<Casilla>();
 
-
             try
             {
                 //Pass the file path and file name to the StreamReader constructor
                 StreamReader sr = new StreamReader(@"C:\Users\hdavi\OneDrive\Documentos\GitHub\ProyectoFinalAnalisis\Proyecto3Analisis\Datos.txt");
                 //Read the first line of text
                 line = sr.ReadLine();
+                int i = 0;
                 //Continue to read until you reach end of file
                 while (line != null)
                 {
@@ -238,7 +400,7 @@ namespace Proyecto3Analisis
                     if (cont2 < 21)
                     {
 
-                        Casilla nueva = new Casilla(tipo, cont);
+                        Casilla nueva = new Casilla(tipo, cont,i,cont2);
                         fila.Add(nueva);
 
                         cont2++;
@@ -251,12 +413,12 @@ namespace Proyecto3Analisis
 
                         fila = new List<Casilla>();
 
-                        
-                        Casilla nueva = new Casilla(tipo, cont);
+                        i++;
+                        Casilla nueva = new Casilla(tipo, cont,i,cont2);
                         fila.Add(nueva);
 
                         cont2 = 2;
-                    
+
                     }
 
                     if(cont == 400)
@@ -267,10 +429,6 @@ namespace Proyecto3Analisis
                     {
                         cont++;
                     }
-                   
-                  
-
-                    
                     //Read the next line
                     line = sr.ReadLine();
                     
@@ -289,7 +447,6 @@ namespace Proyecto3Analisis
             }
         }
            
-
         public void generarDatos()
         {
             int cont = 1;
@@ -334,16 +491,13 @@ namespace Proyecto3Analisis
                     }
 
 
-                    Casilla nueva = new Casilla(tipo, cont);
+                    Casilla nueva = new Casilla(tipo, cont,i,j);
                     fila.Add(nueva);
                     cont++;
-
                 }
                 this.filas.Add(fila);
-
             }
             sw.Close();
-
         }
 
         public void mostrar()
@@ -362,15 +516,11 @@ namespace Proyecto3Analisis
                     {
                         Console.Write(" , " + filas.ElementAt(i).ElementAt(j).getTipo());
                     }
-
                 }
                 Console.WriteLine(" ]");
             }
-
             Console.WriteLine(filas.Count);
             Console.WriteLine(filas.ElementAt(0).Count);
-
-
         }
     }
 }
