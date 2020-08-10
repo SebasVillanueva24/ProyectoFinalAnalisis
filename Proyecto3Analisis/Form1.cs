@@ -21,6 +21,7 @@ namespace Proyecto3Analisis
         {
             Individuo prueba = new Individuo();
 
+
             prueba.setValores();
             prueba.mostrar();
         }
