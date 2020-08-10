@@ -10,11 +10,18 @@ using System.Windows.Forms;
 
 namespace Proyecto3Analisis
 {
-    public partial class Form1 : Form
+    public partial class Inicio : Form
     {
-        public Form1()
+        // aca 
+        string a;
+
+
+        public Inicio()
         {
             InitializeComponent();
+
+
+
         }
 
         private void button1_Click(object sender, EventArgs e)

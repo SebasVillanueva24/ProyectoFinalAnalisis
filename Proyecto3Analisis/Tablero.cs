@@ -26,6 +26,7 @@ namespace Proyecto3Analisis
             int cont2 = 1;
             int tipo = 1;
             string line = "";
+
             List<Casilla> fila = new List<Casilla>();
 
 
@@ -42,15 +43,13 @@ namespace Proyecto3Analisis
                     //write the lie to console window
                     tipo = Int16.Parse(line);
 
-                
-
+                    Console.WriteLine(tipo);
                     if (cont2 < 21)
                     {
-                        
+
                         Casilla nueva = new Casilla(tipo, cont);
                         fila.Add(nueva);
-                        Console.WriteLine(cont2);
-                        Console.WriteLine(cont + "cuenta");
+
                         cont2++;
                         
                     }
@@ -61,13 +60,23 @@ namespace Proyecto3Analisis
 
                         fila = new List<Casilla>();
 
+                        
                         Casilla nueva = new Casilla(tipo, cont);
                         fila.Add(nueva);
 
-                        cont2 = 1;
+                        cont2 = 2;
+                    
                     }
 
-                    cont++;
+                    if(cont == 400)
+                    {
+                        this.filas.Add(fila);
+                    }
+                    else
+                    {
+                        cont++;
+                    }
+                   
                   
 
                     
@@ -148,18 +157,27 @@ namespace Proyecto3Analisis
 
         public void mostrar()
         {
-            
-            for (int i = 0; i < filas.Count; i++)
+            for (int i = filas.Count - 1; i >= 0; i--)
             {
+                
+                Console.Write("[ ");
                 for (int j = 0; j < filas.ElementAt(i).Count; j++)
                 {
-                    filas.ElementAt(i).ElementAt(j).mostrar();
+                    if (j == 0)
+                    {
+                        Console.Write(filas.ElementAt(i).ElementAt(j).getTipo());
+                    }
+                    else
+                    {
+                        Console.Write(" , " + filas.ElementAt(i).ElementAt(j).getTipo());
+                    }
+
                 }
-                Console.WriteLine("-------------------------------------");
+                Console.WriteLine(" ]");
             }
 
             Console.WriteLine(filas.Count);
-            Console.WriteLine(filas.ElementAt(0).Count);
+            Console.WriteLine(filas.ElementAt(0));
 
 
         }
