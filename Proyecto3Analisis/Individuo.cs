@@ -15,7 +15,7 @@ namespace Proyecto3Analisis
         int tipoMotor;
         int tipoBateria;
 
-        int bateriaRestante;
+        
 
         int calificacion;
 
@@ -26,6 +26,7 @@ namespace Proyecto3Analisis
 
         Stack<Casilla> ruta = new Stack<Casilla>();
 
+        public int adaptabilidad;
         private static readonly Random random = new Random();
         private static readonly object syncLock = new object();
 
@@ -40,7 +41,7 @@ namespace Proyecto3Analisis
             tipoMotor = 0;
             tipoBateria = 0;
             calificacion = 0;
-            bateriaRestante = 0;
+            adaptabilidad = 0;
 
             objetivo = false;
         }
@@ -95,6 +96,10 @@ namespace Proyecto3Analisis
         {
             calificacion = resultado;
         }
+        public int getCalificacion()
+        {
+            return calificacion;
+        }
 
         public Stack<Casilla> getRuta()
         {
@@ -116,6 +121,19 @@ namespace Proyecto3Analisis
             int num3 = RandomNumber(1, 4);
 
             tipoBateria = num3;
+        }
+
+        public void setCamara(int dato)
+        {
+            tipoCamara = dato;
+        }
+        public void setMotor(int dato)
+        {
+            tipoMotor = dato;
+        }
+        public void setBateria(int dato)
+        {
+            tipoBateria= dato;
         }
 
         public int getTipoCamara()

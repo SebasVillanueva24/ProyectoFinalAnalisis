@@ -19,7 +19,7 @@ namespace Proyecto3Analisis
         List<List<Individuo>> Generaciones = new List<List<Individuo>>();
 
 
-        int cantIndividuos = 50;
+        int cantIndividuos = 100;
 
         Hashtable Baterias = new Hashtable();
 
@@ -44,13 +44,18 @@ namespace Proyecto3Analisis
 
         public Tablero()
         {
-            Baterias.Add(1, 400);
-            Baterias.Add(2, 800);
-            Baterias.Add(3, 1200);
+            Baterias.Add(1, 80);
+            Baterias.Add(2, 160);
+            Baterias.Add(3, 320);
+
+            leerDatos();
 
             generarPoblacionInicial();
 
             Generaciones.Add(Poblacion);
+
+            AlgoritmoGenetico();
+
 
 
         }
@@ -84,8 +89,6 @@ namespace Proyecto3Analisis
 
             int costoArriba = 0;
             int costoDerecha = 0;
-            int costoIzquierda = 0;
-            int costoAbajo = 0;
 
             
             for (int i = 0; i < filas.Count; i++)
@@ -105,14 +108,7 @@ namespace Proyecto3Analisis
                             costoDerecha += filas.ElementAt(i).ElementAt(j+c).getTipo();
                             costoDerecha += indv.getTipoCamara();
                         }
-                          
-                        //Ruta de la izquierda
-                        
-                        if (j - c > 0)
-                        {
-                            costoIzquierda += filas.ElementAt(i).ElementAt(j-c).getTipo();
-                            costoIzquierda += indv.getTipoCamara();
-                        }
+                     
                         
                         //Ruta de arriba
                         
@@ -122,19 +118,12 @@ namespace Proyecto3Analisis
                             costoArriba += indv.getTipoCamara();
                         }
                         
-                        //Ruta de abajo
+     
+                      
                         
-                        if (i - c > 0)
-                        {
-                            costoAbajo += filas.ElementAt(i-c).ElementAt(j).getTipo();
-                            costoAbajo += indv.getTipoCamara();
-                        }
-
                         
-                        costoRutas.Add(1, costoAbajo);
-                        costoRutas.Add(2, costoArriba);
-                        costoRutas.Add(3, costoDerecha);
-                        costoRutas.Add(4, costoIzquierda);
+                        costoRutas.Add(1, costoArriba);
+                        costoRutas.Add(2, costoDerecha);
                         break;
                     }
                 }   
@@ -151,7 +140,7 @@ namespace Proyecto3Analisis
 
             //List<Casilla> casillasProximas = new List<Casilla>();
 
-            Casilla[] casillasProximas = { null, null, null, null };
+            Casilla[] casillasProximas = { null, null };
 
             if (rutaInv.Count == 0)
             {
@@ -162,15 +151,15 @@ namespace Proyecto3Analisis
                 casillaActual = rutaInv.Peek();
             }
 
-            Console.Write("Casilla actual: ");
-            casillaActual.mostrar();
+            //Console.Write("Casilla actual: ");
+            //casillaActual.mostrar();
 
             Hashtable costos = costoRutas(casillaActual.getID(),indv);
 
             
-            for (int i = 1; i <= 4; i++) 
+            for (int i = 1; i <= 2; i++) 
             {
-                Console.WriteLine(i + " " + costos[i].ToString());
+                //Console.WriteLine(i + " " + costos[i].ToString());
 
                 if (Int16.Parse(costos[i].ToString()) < costoMinimo && Int16.Parse(costos[i].ToString()) != 0)
                 {
@@ -179,30 +168,21 @@ namespace Proyecto3Analisis
             }
             
             
-            Console.WriteLine("\n"+casillaActual.x + " X ");
-            Console.WriteLine(casillaActual.y + " Y ");
+           // Console.WriteLine("\n"+casillaActual.x + " X ");
+            //Console.WriteLine(casillaActual.y + " Y ");
 
-            if (casillaActual.x - 1 >= 0)
-            {
-                //Abajo
-                casillasProximas[0] = filas.ElementAt(casillaActual.x - 1).ElementAt(casillaActual.y);
-            }
             if (casillaActual.x + 1 < 20)
             {
                 //Arriba
-                casillasProximas[1] = (filas.ElementAt(casillaActual.x + 1).ElementAt(casillaActual.y));
+                casillasProximas[0] = (filas.ElementAt(casillaActual.x + 1).ElementAt(casillaActual.y));
             }
             
             if (casillaActual.y + 1 < 20)
             {
                 //Derecha
-                casillasProximas[2] = (filas.ElementAt(casillaActual.x).ElementAt(casillaActual.y + 1));
+                casillasProximas[1] = (filas.ElementAt(casillaActual.x).ElementAt(casillaActual.y + 1));
             }
-            if (casillaActual.y - 1 >= 0)
-            {
-                //Izquierda
-                casillasProximas[3] = (filas.ElementAt(casillaActual.x).ElementAt(casillaActual.y - 1));
-            }
+            
 
 
             int costoFinal = 0;
@@ -298,7 +278,7 @@ namespace Proyecto3Analisis
                             }
                         }
                     }
-                    Console.WriteLine("Ciclo 1");
+                    //Console.WriteLine("Ciclo 1");
                 }
                 
             }
@@ -389,7 +369,7 @@ namespace Proyecto3Analisis
                             }
                         }
                     }
-                    Console.WriteLine("Ciclo 2");
+                    //Console.WriteLine("Ciclo 2");
                 }
             }
             else if (indv.getTipoMotor() == 3)
@@ -479,21 +459,121 @@ namespace Proyecto3Analisis
                             }
                         }
                     }
-                    Console.WriteLine("Ciclo 3");
+                    //Console.WriteLine("Ciclo 3");
                 }
             }
 
             return costoFinal;
         }
 
-        public void Seleccion(int nGen)
+
+        public Individuo seleccionPadres(int nGen)
         {
-            //
-            for (int i = 0; i < Generaciones.ElementAt(nGen).Count; i++)
+            List<Individuo> torneo = new List<Individuo>();
+
+            Individuo Ganador = null;
+
+            int cont = 0;
+
+            while (cont < 6)
             {
-                Individuo indv = Generaciones.ElementAt(nGen).ElementAt(i);
+                int index = RandomNumber(0, 100);
+                torneo.Add(Generaciones.ElementAt(nGen).ElementAt(index));
+                cont++;
+            }
+
+            int max = 0;
+            foreach(Individuo p in torneo)
+            {
+                if(p.getCalificacion()>max)
+                {
+                    max = p.getCalificacion();
+                    Ganador = p;
+                }
+            }
+
+            return Ganador;
+
+
+        }
+
+        public Individuo Crossover(Individuo pPadre, Individuo pMadre,int pID)
+        {
+            Individuo Padre = pPadre;
+            Individuo Madre = pMadre;
+            Individuo hijo = new Individuo(pID);
+            int copia = RandomNumber(0, 101);
+
+            if(5>copia && copia>0)
+            {
+                hijo.setCamara(Padre.getTipoCamara());
+                hijo.setMotor(Padre.getTipoMotor());
+                hijo.setBateria(Padre.getTipoBateria());
+                hijo.setPadre(Padre);
+                hijo.setMadre(Madre);
+
+                return hijo;
+            }
+            else if(10 > copia && copia > 5)
+            {
+                hijo.setCamara(Madre.getTipoCamara());
+                hijo.setMotor(Madre.getTipoMotor());
+                hijo.setBateria(Madre.getTipoBateria());
+                hijo.setPadre(Padre);
+                hijo.setMadre(Madre);
+
+                return hijo;
+            }
+
+            int media = RandomNumber(1, 3);
+
+            if(media == 1)
+            {
+                hijo.setCamara(Padre.getTipoCamara());
+                hijo.setMotor(Padre.getTipoMotor());
+                hijo.setBateria(Madre.getTipoBateria());
+            }
+            else
+            {
+                hijo.setCamara(Padre.getTipoCamara());
+                hijo.setMotor(Madre.getTipoMotor());
+                hijo.setBateria(Madre.getTipoBateria());
 
             }
+
+            hijo.setPadre(Padre);
+            hijo.setMadre(Madre);
+
+            return hijo;
+        }
+
+
+        public void Reproduccion(int nGen)
+        {
+            List<Individuo> nuevaGen = new List<Individuo>();
+            while (nuevaGen.Count<100)
+            {
+                Individuo Padre = seleccionPadres(nGen);
+                Individuo Madre = seleccionPadres(nGen);
+
+
+                int idNuevo = 0;
+                for (int i = 0; i < 2; i++)
+                {
+                    idNuevo = (nuevaGen.Count + 1) + (Generaciones.Count) * cantIndividuos;
+                    Individuo hijo = Crossover(Padre, Madre, idNuevo);
+
+                    int copia = RandomNumber(0, 101);
+
+                    if (10 > copia && copia>0)
+                    {
+                        hijo.mutar();
+                    }
+                    nuevaGen.Add(hijo);
+                }
+            }
+
+            Generaciones.Add(nuevaGen);
 
 
         }
@@ -501,8 +581,9 @@ namespace Proyecto3Analisis
         {
             for (int i = 0; i < Generaciones.ElementAt(nGen).Count; i++)
             {
-                
+
                 Individuo indv = Generaciones.ElementAt(nGen).ElementAt(i);
+            
 
                 int bateriaTotal = Int16.Parse(Baterias[indv.getTipoBateria()].ToString());
 
@@ -514,7 +595,7 @@ namespace Proyecto3Analisis
                     {
                         if(indv.getObjetivo())
                         {
-                            Console.WriteLine("Objetivo alcanzado");
+                            //Console.WriteLine("Objetivo alcanzado");
                             break;
                         }
                         else
@@ -525,12 +606,12 @@ namespace Proyecto3Analisis
 
                                 bateriaTotal = bateriaTotal - costoCasilla;
 
-                                Console.WriteLine("Bateria Restante: " + bateriaTotal);
+                                //Console.WriteLine("Bateria Restante: " + bateriaTotal);
                             }
                             else
                             {
-                                Console.WriteLine("Motor incapaz");
-                                Console.WriteLine("-------------------------------------------------");
+                                //Console.WriteLine("Motor incapaz");
+                                //Console.WriteLine("-------------------------------------------------");
                                 break;
                             }
                         }
@@ -542,7 +623,7 @@ namespace Proyecto3Analisis
 
                         bateriaTotal = bateriaTotal - costoCasilla;
 
-                        Console.WriteLine("\nBateria Restante: " + bateriaTotal);
+                        //Console.WriteLine("\nBateria Restante: " + bateriaTotal);
                     }
                     
                 }
@@ -563,10 +644,12 @@ namespace Proyecto3Analisis
 
                 calificacion += casillaDificil;
 
-                indv.setCalificacion(calificacion);
+                if(indv.getObjetivo())
+                {
+                    calificacion += 20;
+                }
 
-                //Console.WriteLine("ID: "+indv.getID()+"  -  Calificacion: " + calificacion);
-            
+                indv.setCalificacion(calificacion);
 
 
             }
@@ -663,6 +746,35 @@ namespace Proyecto3Analisis
                 Console.WriteLine("Executing finally block.");
             }
         }
+
+        public bool evaluarGeneracion(int nGen)
+        {
+            int terminados = 0;
+            for (int i = 0; i < Generaciones.ElementAt(nGen).Count; i++)
+            {
+                Individuo indv = Generaciones.ElementAt(nGen).ElementAt(i);
+
+                if(indv.getObjetivo())
+                {
+                    terminados++;
+                }
+
+
+            }
+            Console.WriteLine("Generacion: " + nGen);
+            Console.WriteLine(terminados);
+          
+
+            if (terminados>27)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
            
         public void generarDatos()
         {
@@ -738,6 +850,27 @@ namespace Proyecto3Analisis
             }
             Console.WriteLine(filas.Count);
             Console.WriteLine(filas.ElementAt(0).Count);
+        }
+
+        public void AlgoritmoGenetico()
+        {
+
+            int i = 0;
+            fitnessPoblacion(i);
+            
+            while (!evaluarGeneracion(i))
+            {
+                Console.WriteLine("------------------------------");
+                evaluarGeneracion(i);
+                Console.WriteLine("------------------------------");
+                
+                Reproduccion(i);
+                i++;
+                fitnessPoblacion(i);
+
+               
+            }
+            
         }
     }
 }
