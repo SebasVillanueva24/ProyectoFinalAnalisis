@@ -25,7 +25,8 @@ namespace Proyecto3Analisis
 
             foreach (Casilla casilla in rutaRobot)
             {
-               camino.Items.Add("ID: "+ casilla.getID()+ " - Tipo: "+casilla.getTipo());
+               camino.Items.Add("ID: "+ casilla.getID()+ " - Tipo: "+casilla.getTipo() + "      || X: "+
+                   casilla.x + " - Y: "+casilla.y);
             }
         }
     }

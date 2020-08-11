@@ -64,6 +64,16 @@ namespace Proyecto3Analisis
             madre = pMadre;
         }
 
+        public void setObjetivo(bool info)
+        {
+            objetivo = info;
+        }
+
+        public bool getObjetivo()
+        {
+            return objetivo;
+        }
+
         public Individuo getPadre()
         {
             return padre;

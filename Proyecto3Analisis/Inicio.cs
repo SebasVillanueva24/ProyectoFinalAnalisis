@@ -21,13 +21,37 @@ namespace Proyecto3Analisis
             InitializeComponent();
 
             tablero.leerDatos();
+
+            for(int i = 0;i<tablero.getGeneraciones().Count;i++)
+            {
+                generaciones.Items.Add(i);
+
+                
+            }
+
+            generaciones.SelectedIndex = 0;
+
+            List<Individuo> PoblacionEscogida = tablero.getGeneraciones().ElementAt(0);
+            for (int i = 0; i < PoblacionEscogida.Count; i++)
+            {
+                listBox1.Items.Add("ID: "+ PoblacionEscogida.ElementAt(i).getID() + " - [" +
+                    PoblacionEscogida.ElementAt(i).getTipoCamara() + ", " +
+                    PoblacionEscogida.ElementAt(i).getTipoMotor() + ", " +
+                    PoblacionEscogida.ElementAt(i).getTipoBateria() + "]");
+
+
+            }
+            
+
+
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            tablero.mostrarPoblacion();
+            //tablero.mostrarPoblacion();
 
-            tablero.fitnessPoblacion();
+            tablero.fitnessPoblacion(generaciones.SelectedIndex);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -57,18 +81,15 @@ namespace Proyecto3Analisis
 
         private void bRuta_Click(object sender, EventArgs e)
         {
-           
-            Individuo nuevo = new Individuo(0);
+            int indexGen = generaciones.SelectedIndex;
+            int indexRobot = listBox1.SelectedIndex;
 
+            new Ruta(tablero.getGeneraciones().ElementAt(indexGen).ElementAt(indexRobot)).Show();
+        }
 
-            for (int i = 1; i < 6; i++)
-            {
-                Casilla nueva = new Casilla(1, i);
-                nuevo.añadirCasilla(nueva);
-            }
+        private void generaciones_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-            
-            new Ruta(nuevo).Show();
         }
     }
 }
